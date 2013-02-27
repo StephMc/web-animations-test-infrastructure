@@ -1,15 +1,15 @@
 <?php
-// When the tests get trigger the results get sent to this page
+// When the tests get trigged the results get sent to this page
 require( "config.php" );
 
 //print_r($_POST);
 
 $data = isset( $_POST["data"] ) ? $_POST["data"]  : "";
-
+// Do something if the string is ""
 $info =  json_decode($data, true);
 //print_r($info);
 
-if ( $info["type"] == "start"){
+if ($info["type"] == "start"){
   // New incomming test, create new run for it
   // Send back the run ID
   $run = new Run;
