@@ -34,12 +34,13 @@ class Assert
   * @param assoc The property values
   */
 
-  public function __construct( $data = array() ) {
+  public function createEntry( $data = array() ) {
     if (isset( $data['id'])) $this->id = (int) $data['id'];
     if (isset( $data['resultID'])) $this->resultID = (int) $data['resultID'];
     if (isset( $data['result'])) $this->result = (boolean) $data['result'];
     if (isset( $data['message'])) $this->message =
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['message'] );
+    $this -> insert();
   }
 
 

@@ -29,54 +29,14 @@ class Result
   * @param assoc The property values
   */
 
-  public function __construct( $data = array() ) {
+  public function createEntry( $data = array() ) {
     if (isset( $data['id'])) $this->id = (int) $data['id'];
-    if (isset( $data['testRunID'])) $this->publicationDate = (int) $data['testRunID'];
-    if (isset( $data['testName'])) $this->title =
+    if (isset( $data['testRunID'])) $this->testRunID = (int) $data['testRunID'];
+    if (isset( $data['testName'])) $this->testName =
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['testName'] );
+    $this -> insert();
+    return $this -> id;
   }
-
-
-  // /**
-  // * Sets the object's properties using the edit form post values in the supplied array
-  // *
-  // * @param assoc The form post values
-  // */
-
-  // public function storeFormValues ( $params ) {
-
-  //   // Store all the parameters
-  //   $this->__construct( $params );
-
-  //   // Parse and store the publication date
-  //   if ( isset($params['publicationDate']) ) {
-  //     $publicationDate = explode ( '-', $params['publicationDate'] );
-
-  //     if ( count($publicationDate) == 3 ) {
-  //       list ( $y, $m, $d ) = $publicationDate;
-  //       $this->publicationDate = mktime ( 0, 0, 0, $m, $d, $y );
-  //     }
-  //   }
-  // }
-
-
-  // /**
-  // * Returns an Article object matching the given article ID
-  // *
-  // * @param int The article ID
-  // * @return Article|false The article object, or false if the record was not found or there was a problem
-  // */
-
-  // public static function getById( $id ) {
-  //   $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-  //   $sql = "SELECT *, UNIX_TIMESTAMP(publicationDate) AS publicationDate FROM articles WHERE id = :id";
-  //   $st = $conn->prepare( $sql );
-  //   $st->bindValue( ":id", $id, PDO::PARAM_INT );
-  //   $st->execute();
-  //   $row = $st->fetch();
-  //   $conn = null;
-  //   if ( $row ) return new Article( $row );
-  // }
 
 
   /**
@@ -123,11 +83,10 @@ class Result
 
     // Insert the Article
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-    $sql = "INSERT INTO results ( testRunID, testName )
-            VALUES ( :testRunID, :testName )";
+    $sql = "INSERT INTO results ( testRunID, testName ) VALUES ( :testRunID, :testName )";
     $st = $conn->prepare ( $sql );
     $st->bindValue( ":testRunID", $this->testRunID, PDO::PARAM_INT );
-    $st->bindValue( ":testName", $this->testName, PDO::PARAM_STR );
+    $st->bindValue( ":testName", $this->testName, PDO::PARAM_INT );
     $st->execute();
     $this->id = $conn->lastInsertId();
     $conn = null;

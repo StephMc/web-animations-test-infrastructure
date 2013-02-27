@@ -1,0 +1,57 @@
+hey there
+
+<script>
+var testRun = {};
+testRun["type"] = "start";
+testRun["commitSHA"] = "popcorn";
+
+var request = new XMLHttpRequest();
+
+request.onreadystatechange = function() {
+  if (request.readyState==4 && request.status==200) {
+    console.log(request.responseText);
+    doNextThing(request.responseText);
+  }
+}
+
+request.open("POST", "collectResults.php", true);
+request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+request.send("data=" + JSON.stringify(testRun));
+console.log(JSON.stringify(testRun));
+console.log("send data, waiting for reply");
+
+
+function doNextThing(runID){
+  var asserts = {};
+  asserts[0] = {};
+  asserts[0]["result"] = true;
+  asserts[0]["message"] = "tree tree";
+
+  asserts[1] = {};
+  asserts[1]["result"] = false;
+  asserts[1]["message"] = "three tree tree";
+
+
+  var testResult = {};
+  testResult["type"] = "result";
+  testResult["testRunID"] = runID;
+  testResult["testName"] = "fish fingers";
+  testResult["asserts"] = asserts;
+
+
+  var xhr = new XMLHttpRequest();
+
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState==4 && xhr.status==200) {
+      console.log(xhr.responseText);
+    }
+  }
+
+  xhr.open("POST", "collectResults.php", true);
+  xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+  xhr.send("data=" + JSON.stringify(testResult));
+  console.log(JSON.stringify(testResult));
+  console.log("send result , waiting for reply");
+
+}
+</script>
