@@ -93,17 +93,17 @@ class Assert
   * @return Array|false A two-element array : results => array, a list of Article objects; totalRows => Total number of articles
   */
 
-  public static function getTestSet( $runID ) {
+  public static function getTestSet( $resultID ) {
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-    $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM results WHERE testRunID = :runID";
+    $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM asserts WHERE resultID = :resultID";
 
     $st = $conn->prepare( $sql );
-    $st->bindValue( ":runID", $runID, PDO::PARAM_INT );
+    $st->bindValue( ":resultID", $resultID, PDO::PARAM_INT );
     $st->execute();
     $list = array();
 
     while ( $row = $st->fetch() ) {
-      $article = new Result( $row );
+      $article = new Assert( $row );
       $list[] = $article;
     }
 
@@ -116,7 +116,7 @@ class Assert
 
 
   /**
-  * Inserts test results into the database, and sets its ID property.
+  * Inserts assert results into the database, and sets its ID property.
   */
 
   public function insert() {
@@ -129,11 +129,12 @@ class Assert
 
     // Insert the Article
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-    $sql = "INSERT INTO results ( testRunID, testName )
-            VALUES ( :testRunID, :testName )";
+    $sql = "INSERT INTO asserts ( resultID, result, message )
+            VALUES ( :resultID, :result, :message )";
     $st = $conn->prepare ( $sql );
-    $st->bindValue( ":testRunID", $this->testRunID, PDO::PARAM_INT );
-    $st->bindValue( ":testName", $this->testName, PDO::PARAM_STR );
+    $st->bindValue( ":resultID", $this->resultID, PDO::PARAM_INT );
+    $st->bindValue( ":result", $this->result, PDO::PARAM_BOOL );
+    $st->bindValue( ":message", $this->message, PDO::PARAM_STR );
     $st->execute();
     $this->id = $conn->lastInsertId();
     $conn = null;
