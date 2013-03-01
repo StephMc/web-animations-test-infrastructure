@@ -20,11 +20,12 @@ function listRuns(){
           <h2>
             <a href="results.php?action=result&amp;runId=<?php echo $run->id; ?>"><?php echo $run -> id?></a>
           </h2>
-          <p>Run time: <?php echo $run -> runTime;?> <br> Commit SHA1: <?php echo $run->commitSHA;?></p>
+          <p>Run time: <?php echo $run -> runTime; ?> <br> Commit SHA1: <?php echo $run->commitSHA;?></p>
         </p>
   <?php }
 }
 
+// This should trigger loading the commit the tests belong to
 function listResults(){
   $desiredId = $_GET["runId"];
   $query = Result::getTestSet($desiredId);
@@ -35,7 +36,7 @@ function listResults(){
           <h2>
             <a href="<?php echo TEST_PATH;?>/<?php echo $result->testName; ?>"><?php echo $result->testName;?></a>
           </h2>
-          <p>Id: <?php echo $result->id;?> <br> Test Run Id: <?php echo $result->testRunID;?></p>
+          <p>Id: <?php echo $result->id;?> <br> Amount Passed: <?php echo $result->assertsPassed;?></p>
         </p>
   <?php }
 }

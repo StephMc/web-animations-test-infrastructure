@@ -23,6 +23,17 @@ class Result
   */
   public $testName = null;
 
+  public $assertsPassed = null;
+
+  function __construct($data = array()){
+    if (isset( $data['id'])) $this->id = (int) $data['id'];
+    if (isset( $data['testRunID'])) $this->testRunID = (int) $data['testRunID'];
+    if (isset( $data['testName'])) $this->testName =
+        preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['testName'] );
+    if (isset( $data['assertsPassed'])) $this->assertsPassed =
+      preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['assertsPassed'] );
+  }
+
   /**
   * Sets the object's properties using the values in the supplied array
   *
@@ -36,6 +47,20 @@ class Result
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['testName'] );
     $this -> insert();
     return $this -> id;
+  }
+
+  public function update() {
+    // Does the Article object have an ID?
+    if ( is_null( $this->id ) ) trigger_error ( "Article::update(): Attempt to update an Article object that does not have its ID property set.", E_USER_ERROR );
+
+    // Update the Article
+    $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
+    $sql = "UPDATE results SET assertsPassed = :assertsPassed WHERE id = :id";
+    $st = $conn->prepare ( $sql );
+    $st->bindValue( ":assertsPassed", $this->assertsPassed, PDO::PARAM_STR );
+    $st->bindValue( ":id", $this->id, PDO::PARAM_INT );
+    $st->execute();
+    $conn = null;
   }
 
 
@@ -91,47 +116,6 @@ class Result
     $this->id = $conn->lastInsertId();
     $conn = null;
   }
-
-
-  // /**
-  // * Updates the current Article object in the database.
-  // */
-
-  // public function update() {
-
-  //   // Does the Article object have an ID?
-  //   if ( is_null( $this->id ) ) trigger_error ( "Article::update(): Attempt to update an Article object that does not have its ID property set.", E_USER_ERROR );
-
-  //   // Update the Article
-  //   $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-  //   $sql = "UPDATE articles SET publicationDate=FROM_UNIXTIME(:publicationDate), title=:title, summary=:summary, content=:content WHERE id = :id";
-  //   $st = $conn->prepare ( $sql );
-  //   $st->bindValue( ":publicationDate", $this->publicationDate, PDO::PARAM_INT );
-  //   $st->bindValue( ":title", $this->title, PDO::PARAM_STR );
-  //   $st->bindValue( ":summary", $this->summary, PDO::PARAM_STR );
-  //   $st->bindValue( ":content", $this->content, PDO::PARAM_STR );
-  //   $st->bindValue( ":id", $this->id, PDO::PARAM_INT );
-  //   $st->execute();
-  //   $conn = null;
-  // }
-
-
-  // /**
-  // * Deletes the current Article object from the database.
-  // */
-
-  // public function delete() {
-
-  //   // Does the Article object have an ID?
-  //   if ( is_null( $this->id ) ) trigger_error ( "Article::delete(): Attempt to delete an Article object that does not have its ID property set.", E_USER_ERROR );
-
-  //   // Delete the Article
-  //   $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-  //   $st = $conn->prepare ( "DELETE FROM articles WHERE id = :id LIMIT 1" );
-  //   $st->bindValue( ":id", $this->id, PDO::PARAM_INT );
-  //   $st->execute();
-  //   $conn = null;
-  // }
 
 }
 

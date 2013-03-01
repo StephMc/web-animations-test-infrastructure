@@ -13,7 +13,7 @@ if ($info["type"] == "start"){
   // New incomming test, create new run for it
   // Send back the run ID
   $run = new Run;
-  $a = array("runTime" => 5678, "commitSHA" => $info["commitSHA"]);
+  $a = array("commitSHA" => $info["commitSHA"]);
   //print_r($a);
   $createdID = $run -> createEntry($a);
   // Return the id of the run database entry so all related results
@@ -30,12 +30,18 @@ if ($info["type"] == "start"){
   $createdResultID = $result -> createEntry($b);
   print_r($createdResultID);
   //Create entry for each assert in the test
+  $passed = 0;
+  $total = 0;
   foreach ($info["asserts"] as $a) {
     $assert = new Assert;
     $c = array("resultID" => $createdResultID, "result" => $a["result"], "message" => $a["message"]);
     print_r($c);
     $assert -> createEntry($c);
+    $total++;
+    if($a["result"]) $passed++;
   }
+  $result -> assertsPassed = "$passed out of $total";
+  $result -> update();
 } else {
   // This should never happen. Output to the error log
   $e = "collectResults.php: Couldn't read the data sent.";

@@ -5,6 +5,7 @@ define( "DB_DSN", "mysql:host=localhost;dbname=results" );
 define( "DB_USERNAME", "root" );
 define( "DB_PASSWORD", "password" );
 define( "CLASS_PATH", "classes" );
+define( "TEST_PATH", "../web-animations-test-framework/tests");
 //define( "TEMPLATE_PATH", "templates" );
 //define( "HOMEPAGE_NUM_ARTICLES", 5 );
 //define( "ADMIN_USERNAME", "root" );
