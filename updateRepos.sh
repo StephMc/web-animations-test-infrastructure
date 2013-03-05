@@ -12,7 +12,7 @@ git pull
 if [ "$1" != "" ];
 then
   echo "reseting git to $1"
-  #git reset --soft $1
+  git checkout $1
 fi
 
 echo finished

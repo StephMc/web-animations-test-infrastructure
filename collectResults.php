@@ -10,18 +10,9 @@ $data = isset( $_POST["data"] ) ? $_POST["data"]  : "";
 $info =  json_decode($data, true);
 //print_r($info);
 
-if ($info["type"] == "start"){
-  // New incomming test, create new run for it
-  // Send back the run ID
-  $run = new Run;
-  $a = array("commitSHA" => $info["commitSHA"]);
-  //print_r($a);
-  $createdID = $run -> createEntry($a);
-  // Return the id of the run database entry so all related results
-  // are attached to the right run instance
-  echo $createdID;
-} else if ( $info["type"] == "finished"){
-  // Kill the Xvfb after x seconds to allow packets to arrive out of order
+if ( $info["type"] == "finished"){
+  // Kill the Xvfb and chrome then check for the next test
+  exec("bash /var/www/web-animations-test-infrastructure/resetAndTrigger.sh ");
 } else if ( $info["type"] == "result"){
   // Add the incomming result to the database
   // Create new result entry
