@@ -19,11 +19,6 @@ class Assert
   public $resultID = null;
 
   /**
-  * @var boolean If the test passed
-  */
-  public $result = null;
-
-  /**
   * @var string Contains the test error message
   */
   public $message = null;
@@ -31,7 +26,6 @@ class Assert
   function __construct($data = array()){
     if (isset( $data['id'])) $this->id = (int) $data['id'];
     if (isset( $data['resultID'])) $this->resultID = (int) $data['resultID'];
-    if (isset( $data['result'])) $this->result = (boolean) $data['result'];
     if (isset( $data['message'])) $this->message =
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['message'] );
   }
@@ -45,7 +39,6 @@ class Assert
   public function createEntry( $data = array() ) {
     if (isset( $data['id'])) $this->id = (int) $data['id'];
     if (isset( $data['resultID'])) $this->resultID = (int) $data['resultID'];
-    if (isset( $data['result'])) $this->result = (boolean) $data['result'];
     if (isset( $data['message'])) $this->message =
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['message'] );
     $this -> insert();
@@ -95,11 +88,10 @@ class Assert
 
     // Insert the Article
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-    $sql = "INSERT INTO asserts ( resultID, result, message )
-            VALUES ( :resultID, :result, :message )";
+    $sql = "INSERT INTO asserts ( resultID, message )
+            VALUES ( :resultID, :message )";
     $st = $conn->prepare ( $sql );
     $st->bindValue( ":resultID", $this->resultID, PDO::PARAM_INT );
-    $st->bindValue( ":result", $this->result, PDO::PARAM_BOOL );
     $st->bindValue( ":message", $this->message, PDO::PARAM_STR );
     $st->execute();
     $this->id = $conn->lastInsertId();

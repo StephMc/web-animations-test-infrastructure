@@ -2,6 +2,7 @@
 // When the tests get trigged the results get sent to this page
 require( "config.php" );
 
+//print_r("testing im here");
 //print_r($_POST);
 
 $data = isset( $_POST["data"] ) ? $_POST["data"]  : "";
@@ -26,20 +27,20 @@ if ($info["type"] == "start"){
   // Create new result entry
   $result = new Result;
   $b = array("testRunID" => $info["testRunID"], "testName" => $info["testName"]);
-  print_r($b);
+  //print_r($b);
   $createdResultID = $result -> createEntry($b);
-  print_r($createdResultID);
+  //print_r($createdResultID);
   //Create entry for each assert in the test
-  $passed = 0;
-  $total = 0;
+  $failed = 0;
+  $total = $info["numberOfAsserts"];
   foreach ($info["asserts"] as $a) {
     $assert = new Assert;
-    $c = array("resultID" => $createdResultID, "result" => $a["result"], "message" => $a["message"]);
+    $c = array("resultID" => $createdResultID, "message" => $a["message"]);
     print_r($c);
     $assert -> createEntry($c);
-    $total++;
-    if($a["result"]) $passed++;
+    $failed++;
   }
+  $passed = $total - $failed;
   $result -> assertsPassed = "$passed out of $total";
   $result -> update();
 } else {
