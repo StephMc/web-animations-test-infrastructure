@@ -1,22 +1,10 @@
 <?php
-
-/**
- * Class to handle articles
- */
-
 class QueuedRun
 {
-  /**
-  * @var int The queuedRun ID from the database
-  */
   public $id = null;
-
   public $sha1 = null;
-
   public $commitMessage = null;
-
   public $commitURL = null;
-
   public $commitTime = null;
 
   function __construct($data = array()){
@@ -29,12 +17,6 @@ class QueuedRun
       preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['commitURL'] );
     if ( isset( $data['commitTime'] ) ) $this->commitTime = $data['commitTime'];
   }
-
-  /**
-  * Sets the object's properties using the values in the supplied array
-  *
-  * @param assoc The property values
-  */
 
   public function createEntry( $data = array() ) {
     if (isset( $data['sha1'])) $this->sha1 =
@@ -74,8 +56,6 @@ class QueuedRun
   }
 
   public function insert() {
-
-    // Does the QueuedRun object already have an ID?
     if ( !is_null( $this->id ) ){
       trigger_error ( "QueuedRun::insert(): Attempt to insert an QueuedRun that
           object already has its ID property set (to $this->id).", E_USER_ERROR );
@@ -93,7 +73,5 @@ class QueuedRun
     $this->id = $conn->lastInsertId();
     $conn = null;
   }
-
 }
-
 ?>
