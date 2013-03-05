@@ -34,7 +34,7 @@ class QueuedRun
     if ( is_null( $this->id ) ) trigger_error ( "QueuedRun::delete(): Attempt to delete an QueuedRun object that does not have its ID property set.", E_USER_ERROR );
 
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-    $st = $conn->prepare ( "DELETE FROM queuedRun WHERE id = :id LIMIT 1" );
+    $st = $conn->prepare ( "DELETE FROM queuedRuns WHERE id = :id LIMIT 1" );
     $st->bindValue( ":id", $this->id, PDO::PARAM_INT );
     $st->execute();
     $conn = null;
@@ -42,7 +42,7 @@ class QueuedRun
 
   public static function getNextRun() {
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-    $sql = "SELECT * FROM queuedRun ORDER BY commitTime DESC LIMIT 0, 1 ";
+    $sql = "SELECT * FROM queuedRuns ORDER BY commitTime DESC LIMIT 0, 1 ";
 
     $st = $conn->prepare( $sql );
     $st->execute();
@@ -63,7 +63,7 @@ class QueuedRun
 
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
     // change it to take the time later
-    $sql = "INSERT INTO queuedRun ( sha1, commitMessage, commitURL, commitTime )
+    $sql = "INSERT INTO queuedRuns ( sha1, commitMessage, commitURL, commitTime )
             VALUES ( :sha1, :commitMessage, :commitURL,  date('Y-m-d H:i:s') )";
     $st = $conn->prepare ( $sql );
     $st->bindValue( ":sha1", $this->sha1, PDO::PARAM_STR );

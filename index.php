@@ -19,7 +19,7 @@ function listRuns(){
   foreach ( $runs as $run) { ?>
         <p>
           <h2>
-            <a href="results.php?action=result&amp;runId=<?php echo $run->id; ?>"><?php echo $run -> id?></a>
+            <a href="?action=result&amp;runId=<?php echo $run->id; ?>"><?php echo $run -> id?></a>
           </h2>
           <p>Run time: <?php echo $run -> runTime; ?> <br> Commit SHA1: <?php echo $run->commitSHA;?></p>
         </p>
@@ -34,10 +34,23 @@ function listResults(){
   foreach ($resultSet as $result) { ?>
         <p>
           <h2>
-            <a href="<?php echo TEST_PATH;?>/<?php echo $result->testName; ?>"><?php echo $result->testName;?></a>
+            <a href="?action=assert&amp;resultId=<?php echo $result->id; ?>"><?php echo $result->testName;?></a>
           </h2>
-          <p>Id: <?php echo $result->id;?> <br> Amount Passed: <?php echo $result->assertsPassed;?></p>
+          <p> Amount Passed: <?php echo $result->assertsPassed;?></p>
         </p>
+  <?php }
+}
+
+function listAsserts(){
+  $desiredId = $_GET["resultId"];
+  $query = Assert::getResultSet($desiredId);
+  $assertSet = $query["results"];
+  $result = Result::getById(desiredId);
+
+  ?> <h1><?php $result -> testName?> </h1>
+  <p> Amount Passed: <?php $result -> testName ?> </p> <?php
+  foreach ($assertSet as $assert) { ?>
+        <p> Error Message: <?php echo $assert->message;?> </p>
   <?php }
 }
 ?>

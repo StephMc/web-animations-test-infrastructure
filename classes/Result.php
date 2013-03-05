@@ -24,6 +24,20 @@ class Result
     return $this -> id;
   }
 
+  public static function getById($resultId) {
+    $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
+    $sql = "SELECT * FROM result WHERE id = :resultID";
+
+    $st = $conn->prepare( $sql );
+    $st->bindValue( ":rresultID", $resultID, PDO::PARAM_INT );
+    $st->execute();
+
+    if($row = $st->fetch()) $result = new Result($row);
+
+    $conn = null;
+    return ($result);
+  }
+
   public function update() {
     if ( is_null( $this->id ) ) trigger_error ( "Result::update(): Attempt to
         update an Result object that does not have its ID property set.", E_USER_ERROR );
