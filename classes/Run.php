@@ -22,6 +22,8 @@ class Run {
   */
   public $commitSHA = null;
 
+  public $commitMessage = null;
+
   public $testsPassed = null;
 
 
@@ -30,6 +32,8 @@ class Run {
     if ( isset( $data['runTime'] ) ) $this->runTime = $data['runTime'];
     if ( isset( $data['commitSHA'] ) ) $this->commitSHA =
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['commitSHA'] );
+    if ( isset( $data['commitMessage'] ) ) $this->commitMessage =
+        preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['commitMessage'] );
     if ( isset( $data['testsPassed'] ) ) $this->testsPassed =
       preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['testsPassed'] );
   }
@@ -44,6 +48,8 @@ class Run {
     if ( isset( $data['runTime'] ) ) $this->runTime = (int) $data['runTime'];
     if ( isset( $data['commitSHA'] ) ) $this->commitSHA =
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['commitSHA'] );
+    if ( isset( $data['commitMessage'] ) ) $this->commitMessage =
+        preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['commitMessage'] );
     if ( isset( $data['testsPassed'] ) ) $this->testsPassed =
       preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['testsPassed'] );
     $this -> insert();
@@ -124,10 +130,11 @@ class Run {
 
     // Insert the Article
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-    $sql = "INSERT INTO runs ( runTime, commitSHA ) VALUES ( date('Y-m-d H:i:s'), :commitSHA )";
+    $sql = "INSERT INTO runs ( runTime, commitSHA, commitMessage ) VALUES ( date('Y-m-d H:i:s'), :commitSHA, :commitMessage )";
     $st = $conn->prepare ( $sql );
     //$st->bindValue( ":runTime", $this->runTime, PDO::PARAM_INT );
-    $st->bindValue( ":commitSHA", $this->commitSHA, PDO::PARAM_INT );
+    $st->bindValue( ":commitSHA", $this->commitSHA, PDO::PARAM_STR );
+    $st->bindValue( ":commitMessage", $this->commitMessage, PDO::PARAM_STR );
     $st->execute();
     $this -> id = $conn->lastInsertId();
     $conn = null;
