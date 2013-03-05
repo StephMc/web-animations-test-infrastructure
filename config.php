@@ -14,6 +14,7 @@ define( "TEST_PATH", "../web-animations-test-framework/tests");
 require( CLASS_PATH . "/Result.php" );
 require( CLASS_PATH . "/Assert.php" );
 require( CLASS_PATH . "/Run.php" );
+require( CLASS_PATH . "/QueuedRun.php" );
 
 function handleException( $exception ) {
   echo "Sorry, a problem occurred. Please try later.";
