@@ -6,7 +6,7 @@ To allow the web-animation tests to be autoamatically trigged by github
 postrecieve hooks and the results + results history to be displayed on a
 web page.
 
-<h3>Overview: </h3> <br>
+<h3>Overview: </h3>
 1. Github's post recieve hook sends a JSON POST request to queueRuns.php. <br>
 2. In queueRuns.php aach commit in the post request is put into the
    queuedRuns tables in the database. <br>
