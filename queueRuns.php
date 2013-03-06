@@ -21,5 +21,4 @@ if($payload != ""){
 } else {
   echo "failure";
 }
-
 ?>
