@@ -29,6 +29,8 @@ web page.
 - Results of all the tests are displayed using index.php.
 - All the tables for the database are created using the .sql files in the
   sql directory.
+- Everything in the classes directory controlls how to access a database
+  table of the same name.
 
 <h3>Todos:</h3>
 - Remove specific QueuedRun as soon as the Run for it is created
