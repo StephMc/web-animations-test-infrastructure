@@ -1,12 +1,12 @@
 web-animations-test-infrastructure
 ==================================
 
-Aim:
+<h3>Aim: </h3>
 To allow the web-animation tests to be autoamatically trigged by github
 postrecieve hooks and the results + results history to be displayed on a
 web page.
 
-Overview:
+<h3>Overview: </h3> <br>
 1. Github's post recieve hook sends a JSON POST request to queueRuns.php. <br>
 2. In queueRuns.php aach commit in the post request is put into the
    queuedRuns tables in the database. <br>
@@ -25,12 +25,12 @@ Overview:
    call triggerTests.php. Then repeats from 4 if more commits to process
    otherwise it will stop there. <br>
 
-Notes:
+<h3>Notes:</h3>
 - Results of all the tests are displayed using index.php.
 - All the tables for the database are created using the .sql files in the
   sql directory.
 
-Todos:
+<h3>Todos:</h3>
 - Remove specific QueuedRun as soon as the Run for it is created
 - Fix how times for commits are added to database
 - Visually display the results in index.php
