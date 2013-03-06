@@ -7,23 +7,23 @@ postrecieve hooks and the results + results history to be displayed on a
 web page.
 
 Overview:
-1. Github's post recieve hook sends a JSON POST request to queueRuns.php.
+1. Github's post recieve hook sends a JSON POST request to queueRuns.php. <br>
 2. In queueRuns.php aach commit in the post request is put into the
-   queuedRuns tables in the database.
-3. It then uses curl to cause triggerTests.php to run.
+   queuedRuns tables in the database. <br>
+3. It then uses curl to cause triggerTests.php to run. <br>
 4. TriggerTests.php takes the most recent commit from queuedRuns table,
    creates a new Run for it then passes the Run's id and the commits sha1
-   to triggerTests.sh
+   to triggerTests.sh <br>
 5. TriggerTests.sh moves the local repo to the desired commit using
    updateRepos.sh, cleans the chrome cache and then uses xvfb-run to
-   start testRunner.html (in test framework repo) running though the tests.
+   start testRunner.html (in test framework repo) running though the tests.<br>
 6. TestRunner.html sends XHRs to collectResults.php. The results are put
    into the database. It sends a XHR to say when it is finished. This
    causes collectResults.php to remove the latest QueuedRun from the
-   database and call resetAndTrigger.sh.
+   database and call resetAndTrigger.sh. <br>
 7. ResetAndTrigger.sh kills the Xvfb and chrome and then uses curl to
    call triggerTests.php. Then repeats from 4 if more commits to process
-   otherwise it will stop there.
+   otherwise it will stop there. <br>
 
 Notes:
 - Results of all the tests are displayed using index.php.
