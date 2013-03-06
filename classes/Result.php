@@ -26,13 +26,16 @@ class Result
 
   public static function getById($resultId) {
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-    $sql = "SELECT * FROM result WHERE id = :resultID";
+    $sql = "SELECT * FROM results WHERE id = :resultId";
 
     $st = $conn->prepare( $sql );
-    $st->bindValue( ":rresultID", $resultID, PDO::PARAM_INT );
+    $st->bindValue( ":resultId", $resultId, PDO::PARAM_INT );
     $st->execute();
 
-    if($row = $st->fetch()) $result = new Result($row);
+    $result = null;
+    while ( $row = $st->fetch() ) {
+      $result = new Result( $row );
+    }
 
     $conn = null;
     return ($result);

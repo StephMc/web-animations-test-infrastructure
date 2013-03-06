@@ -1,5 +1,8 @@
 #! bash
-bash updateRepos.sh $1
+#bash updateRepos.sh $1
+echo "new test bash out" >> logfile.txt
+echo $1 >> logfile.txt
+echo $2 >> logfile.txt
 #echo starting to run tests
 rm -R tmpChromeCache
 mkdir tmpChromeCache

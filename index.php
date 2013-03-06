@@ -19,9 +19,11 @@ function listRuns(){
   foreach ( $runs as $run) { ?>
         <p>
           <h2>
-            <a href="?action=result&amp;runId=<?php echo $run->id; ?>"><?php echo $run -> id?></a>
+            <a href="?action=result&amp;runId=<?php echo $run->id; ?>"><?php echo $run -> commitMessage?></a>
           </h2>
-          <p>Run time: <?php echo $run -> runTime; ?> <br> Commit SHA1: <?php echo $run->commitSHA;?></p>
+          <p>Run time: <?php echo $run -> runTime; ?> <br> 
+          Commit SHA1: <a href="https://github.com/StephMc/web-animations-test-framework/commit/<?php echo $run->commitSHA;?>">
+		       <?php echo $run->commitSHA;?></a></p>
         </p>
   <?php }
 }
@@ -43,12 +45,13 @@ function listResults(){
 
 function listAsserts(){
   $desiredId = $_GET["resultId"];
-  $query = Assert::getResultSet($desiredId);
+  //print_r($desiredId);
+  $query = Assert::getAssertSet($desiredId);
   $assertSet = $query["results"];
-  $result = Result::getById(desiredId);
+  $result = Result::getById($desiredId);
 
-  ?> <h1><?php $result -> testName?> </h1>
-  <p> Amount Passed: <?php $result -> testName ?> </p> <?php
+  ?> <h1><?php echo $result->testName?></h1>
+  <p> Amount Passed: <?php echo $result->assertsPassed ?> </p> <?php
   foreach ($assertSet as $assert) { ?>
         <p> Error Message: <?php echo $assert->message;?> </p>
   <?php }

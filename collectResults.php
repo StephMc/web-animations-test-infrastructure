@@ -8,6 +8,9 @@ $data = isset( $_POST["data"] ) ? $_POST["data"]  : "";
 $info =  json_decode($data, true);
 
 if ( $info["type"] == "finished"){
+  // Delete the QueuedRun that was jsut completed
+  $victim = QueuedRun::getNextRun();
+  $victim -> delete();
   // Kill the Xvfb and chrome then check for the next test
   exec("bash /var/www/web-animations-test-infrastructure/resetAndTrigger.sh ");
 } else if ( $info["type"] == "result"){

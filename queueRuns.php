@@ -14,6 +14,10 @@ if($payload != ""){
     $p = $queuedRun -> createEntry($a);
     fwrite($fp, "$p" . PHP_EOL);
   }
+  $nextRun = QueuedRun::getNextRun();
+  $a = $nextRun -> commitMessage;
+  fwrite($fp, "$a" . PHP_EOL);
+  exec("curl http://14.200.8.150/web-animations-test-infrastructure/triggerTests.php");
 } else {
   echo "failure";
 }
