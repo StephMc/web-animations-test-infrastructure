@@ -30,15 +30,16 @@ class Run {
     return $this -> id;
   }
 
-  public static function getById($runId) {
+  public static function getById($runID) {
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
     $sql = "SELECT * FROM runs WHERE id = :runID";
 
     $st = $conn->prepare( $sql );
     $st->bindValue( ":runID", $runID, PDO::PARAM_INT );
     $st->execute();
-
-    if($row = $st->fetch()) $run = new Run($row);
+    
+    $row = $st->fetch();
+    $run = new Run($row);
 
     $conn = null;
     return ($run);
@@ -87,11 +88,13 @@ class Run {
     }
 
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-    $sql = "INSERT INTO runs ( runTime, commitSHA, commitMessage ) VALUES ( date('Y-m-d H:i:s'), :commitSHA, :commitMessage )";
+    $sql = "INSERT INTO runs ( runTime, commitSHA, commitMessage, testsPassed ) 
+            VALUES ( date('Y-m-d H:i:s'), :commitSHA, :commitMessage, :testsPassed )";
     $st = $conn->prepare ( $sql );
     //$st->bindValue( ":runTime", $this->runTime, PDO::PARAM_INT );
     $st->bindValue( ":commitSHA", $this->commitSHA, PDO::PARAM_STR );
     $st->bindValue( ":commitMessage", $this->commitMessage, PDO::PARAM_STR );
+    $st->bindValue( ":testsPassed", $this->testsPassed, PDO::PARAM_STR );
     $st->execute();
     $this -> id = $conn->lastInsertId();
     $conn = null;

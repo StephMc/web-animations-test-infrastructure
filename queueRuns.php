@@ -17,6 +17,7 @@ if($payload != ""){
   $nextRun = QueuedRun::getNextRun();
   $a = $nextRun -> commitMessage;
   fwrite($fp, "$a" . PHP_EOL);
+  fwrite($fp, "trigger tests bash being called" . PHP_EOL);
   exec("curl http://14.200.8.150/web-animations-test-infrastructure/triggerTests.php");
 } else {
   echo "failure";
