@@ -1,3 +1,4 @@
+<link rel='stylesheet' href='index.css'>
 <?php
 require( "config.php" );
 $action = isset( $_GET['action'] ) ? $_GET['action'] : "";
@@ -17,7 +18,11 @@ function listRuns(){
   $query = Run::getList();
   $runs = $query["results"];
   foreach ( $runs as $run) { ?>
-        <p>
+       <div class=<?php
+         list($passed, $total) = explode(" out of ",$run->testsPassed);
+         if($passed == $total) echo "pass";
+         else echo "fail";
+         ?>><p>
           <h2>
             <a href="?action=result&amp;runId=<?php echo $run->id; ?>"><?php echo $run -> commitMessage?></a>
           </h2>
@@ -25,7 +30,7 @@ function listRuns(){
           Commit SHA1: <a href="https://github.com/StephMc/web-animations-test-framework/commit/<?php echo $run->commitSHA;?>">
 		       <?php echo $run->commitSHA;?></a><br>
 	  Amount Passed: <?php echo $run->testsPassed;?></p>
-        </p>
+        </p></div><br>
   <?php }
 }
 
