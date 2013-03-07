@@ -23,7 +23,8 @@ function listRuns(){
           </h2>
           <p>Run time: <?php echo $run -> runTime; ?> <br> 
           Commit SHA1: <a href="https://github.com/StephMc/web-animations-test-framework/commit/<?php echo $run->commitSHA;?>">
-		       <?php echo $run->commitSHA;?></a></p>
+		       <?php echo $run->commitSHA;?></a><br>
+	  Amount Passed: <?php echo $run->testsPassed;?></p>
         </p>
   <?php }
 }

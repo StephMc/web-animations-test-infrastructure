@@ -8,6 +8,9 @@ $data = isset( $_POST["data"] ) ? $_POST["data"]  : "";
 $info =  json_decode($data, true);
 
 if ( $info["type"] == "finished"){
+  $run = Run::getById($info["testRunId"]);
+  $run -> testsPassed = $info["testsPassed"];
+  $run -> update(); 
   // Kill the Xvfb and chrome then check for the next test
   exec("bash /var/www/web-animations-test-infrastructure/resetAndTrigger.sh ");
 } else if ( $info["type"] == "result"){
