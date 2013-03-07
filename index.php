@@ -38,7 +38,17 @@ function listResults(){
           <h2>
             <a href="?action=assert&amp;resultId=<?php echo $result->id; ?>"><?php echo $result->testName;?></a>
           </h2>
-          <p> Amount Passed: <?php echo $result->assertsPassed;?></p>
+          <p> Amount Passed: <?php echo $result->assertsPassed;?> <br>
+          <?php
+          list($passed, $total) = explode(" out of ",$result->assertsPassed);
+          $failed = $total - $passed;
+          for($i = 0; $i < $passed; $i++){
+            ?><img src="pass.png" alt="pass" width="15" height="15"><?php
+	  }
+          for($i = 0; $i < $failed; $i++){
+            ?><img src="fail.png" alt="fail" width="15" height="15"><?php
+	  }?>
+          </p>
         </p>
   <?php }
 }
