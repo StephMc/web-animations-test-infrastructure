@@ -1,4 +1,5 @@
 <link rel='stylesheet' href='index.css'>
+<body>
 <?php
 require( "config.php" );
 $action = isset( $_GET['action'] ) ? $_GET['action'] : "";
@@ -14,12 +15,36 @@ switch ( $action ) {
     listRuns();
 }
 
-function listRuns(){
+function listRuns(){ ?>
+  <h1>Web Animation Test Results</h1>
+  <h3> Extra Links</h3>
+  <a href="http://14.200.8.150/phpmyadmin"> PhpMyAdmin </a> <br>
+  <a href="http://14.200.8.150/web-animations-test-framework/tests/testRunner.html"> Graphic view of tests </a> <br>
+  <a href="http://14.200.8.150/web-animations-test-framework/tests/testGenerator.html"> Test Generator </a> <br>
+  <?php
   $query = Run::getList();
   $runs = $query["results"];
-  foreach ( $runs as $run) { ?>
+  $i = 0;
+  foreach ( $runs as $run) {
+    list($passed, $total) = explode(" out of ",$run->testsPassed);
+    if($i == 0){
+      ?> <h2> Latest Commit </h2>
+      <div class=<?php
+        if($passed == $total) echo "pass";
+        else echo "fail";
+        ?>><p>
+        <h2>
+          <a href="?action=result&amp;runId=<?php echo $run->id; ?>"><?php echo $run -> commitMessage?></a>
+        </h2>
+        <p>Run time: <?php echo $run -> runTime; ?> <br> 
+           Commit SHA1: <a href="https://github.com/StephMc/web-animations-test-framework/commit/<?php echo $run->commitSHA;?>">
+		       <?php echo $run->commitSHA;?></a><br>
+	         Amount Passed: <?php echo $run->testsPassed;?></p>
+        </p>
+      </div><br>
+      <h2> History </h2> <?php
+    } else {?>
        <div class=<?php
-         list($passed, $total) = explode(" out of ",$run->testsPassed);
          if($passed == $total) echo "pass";
          else echo "fail";
          ?>><p>
@@ -32,6 +57,8 @@ function listRuns(){
 	  Amount Passed: <?php echo $run->testsPassed;?></p>
         </p></div><br>
   <?php }
+  $i++;
+  }
 }
 
 function listResults(){
@@ -73,3 +100,4 @@ function listAsserts(){
   <?php }
 }
 ?>
+</body>
