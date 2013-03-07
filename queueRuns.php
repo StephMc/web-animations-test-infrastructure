@@ -10,7 +10,7 @@ if($payload != ""){
   $commits = $payload["commits"];
   foreach ($commits as $commit) {
     $queuedRun = new QueuedRun;
-    $a = array("sha1" => $commit["id"], "commitMessage" => $commit["message"], "commitURL" => $commit["url"]);
+    $a = array("sha1" => $commit["id"], "commitMessage" => $commit["message"]);
     $p = $queuedRun -> createEntry($a);
     fwrite($fp, "$p" . PHP_EOL);
   }

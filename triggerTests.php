@@ -12,7 +12,10 @@ if($nextRun){
   // There's a test run to do
   // Create a new test run
   $run = new Run;
-  $a = array("commitSHA" => $nextRun -> sha1, "commitMessage" => $nextRun -> commitMessage, "testsPassed"=> "Running...");
+  $a = array("commitSHA" => $nextRun -> sha1,
+             "commitMessage" => $nextRun -> commitMessage,
+             "commitOrder" => $nextRun -> id,
+             "testsPassed" => "Running...");
   $runId = $run -> createEntry($a);
   $sha1 = $nextRun -> sha1;
   // Delete the QueuedRun that was just completed

@@ -4,7 +4,6 @@ class QueuedRun
   public $id = null;
   public $sha1 = null;
   public $commitMessage = null;
-  public $commitURL = null;
   public $commitTime = null;
 
   function __construct($data = array()){
@@ -13,8 +12,6 @@ class QueuedRun
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['sha1'] );
     if (isset( $data['commitMessage'])) $this->commitMessage =
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['commitMessage'] );
-    if (isset( $data['commitURL'])) $this->commitURL =
-      preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['commitURL'] );
     if ( isset( $data['commitTime'] ) ) $this->commitTime = $data['commitTime'];
   }
 
@@ -23,8 +20,6 @@ class QueuedRun
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['sha1'] );
     if (isset( $data['commitMessage'])) $this->commitMessage =
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['commitMessage'] );
-    if (isset( $data['commitURL'])) $this->commitURL =
-      preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['commitURL'] );
     if ( isset( $data['commitTime'] ) ) $this->commitTime = $data['commitTime'];
     $this -> insert();
     return $this -> id;
@@ -42,7 +37,9 @@ class QueuedRun
 
   public static function getNextRun() {
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-    $sql = "SELECT * FROM queuedRuns ORDER BY commitTime DESC LIMIT 0, 1 ";
+    // Assumes the commits get process oldest to newest so the highest
+    // id is the most recent
+    $sql = "SELECT * FROM queuedRuns ORDER BY id DESC LIMIT 0, 1 ";
 
     $st = $conn->prepare( $sql );
     $st->execute();
@@ -63,12 +60,11 @@ class QueuedRun
 
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
     // change it to take the time later
-    $sql = "INSERT INTO queuedRuns ( sha1, commitMessage, commitURL, commitTime )
-            VALUES ( :sha1, :commitMessage, :commitURL,  date('Y-m-d H:i:s') )";
+    $sql = "INSERT INTO queuedRuns ( sha1, commitMessage, commitTime )
+            VALUES ( :sha1, :commitMessage, date('Y-m-d H:i:s') )";
     $st = $conn->prepare ( $sql );
     $st->bindValue( ":sha1", $this->sha1, PDO::PARAM_STR );
     $st->bindValue( ":commitMessage", $this->commitMessage, PDO::PARAM_STR );
-    $st->bindValue( ":commitURL", $this->commitURL, PDO::PARAM_STR );
     $st->execute();
     $this->id = $conn->lastInsertId();
     $conn = null;

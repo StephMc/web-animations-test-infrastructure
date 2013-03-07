@@ -5,9 +5,11 @@ class Run {
   public $commitSHA = null;
   public $commitMessage = null;
   public $testsPassed = null;
+  public $commitOrder = null;
 
   function __construct($data = array()){
     if ( isset( $data['id'] ) ) $this->id = (int) $data['id'];
+    if ( isset( $data['commitOrder'] ) ) $this->commitOrder = (int) $data['commitOrder'];
     if ( isset( $data['runTime'] ) ) $this->runTime = $data['runTime'];
     if ( isset( $data['commitSHA'] ) ) $this->commitSHA =
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['commitSHA'] );
@@ -19,6 +21,7 @@ class Run {
 
   public function createEntry( $data = array() ) {
     if ( isset( $data['id'] ) ) $this->id = (int) $data['id'];
+    if ( isset( $data['commitOrder'] ) ) $this->commitOrder = (int) $data['commitOrder'];
     if ( isset( $data['runTime'] ) ) $this->runTime = (int) $data['runTime'];
     if ( isset( $data['commitSHA'] ) ) $this->commitSHA =
         preg_replace ( "/[^\.\,\-\_\'\"\@\?\!\:\$ a-zA-Z0-9()]/", "", $data['commitSHA'] );
@@ -60,7 +63,7 @@ class Run {
     $conn = null;
   }
 
-  public static function getList( $numRows=1000000, $order="id DESC" ) {
+  public static function getList( $numRows=1000000, $order="commitOrder DESC" ) {
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
     $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM runs
             ORDER BY " . mysql_escape_string($order) . " LIMIT :numRows";
@@ -88,10 +91,10 @@ class Run {
     }
 
     $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-    $sql = "INSERT INTO runs ( runTime, commitSHA, commitMessage, testsPassed ) 
-            VALUES ( date('Y-m-d H:i:s'), :commitSHA, :commitMessage, :testsPassed )";
+    $sql = "INSERT INTO runs ( runTime, commitSHA, commitMessage, testsPassed, commitOrder ) 
+            VALUES ( date('Y-m-d H:i:s'), :commitSHA, :commitMessage, :testsPassed, :commitOrder )";
     $st = $conn->prepare ( $sql );
-    //$st->bindValue( ":runTime", $this->runTime, PDO::PARAM_INT );
+    $st->bindValue( ":commitOrder", $this->commitOrder, PDO::PARAM_INT );
     $st->bindValue( ":commitSHA", $this->commitSHA, PDO::PARAM_STR );
     $st->bindValue( ":commitMessage", $this->commitMessage, PDO::PARAM_STR );
     $st->bindValue( ":testsPassed", $this->testsPassed, PDO::PARAM_STR );

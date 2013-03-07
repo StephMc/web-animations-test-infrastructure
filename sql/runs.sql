@@ -5,6 +5,7 @@ CREATE TABLE runs (
   commitSHA  varchar(255) NOT NULL,
   commitMessage varchar(500) NOT NULL,
   testsPassed varchar(255) NOT NULL,
+  commitOrder int unsigned NOT NULL,
 
   PRIMARY KEY (id)
 );
