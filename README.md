@@ -24,16 +24,32 @@ web page.
    call triggerTests.php. Then repeats from 4 if more commits to process
    otherwise it will stop there. <br>
 
+<h3>How to set up</h3>
+1. Install Apache2, MySQL and PHP. PhpMyAdmin is also handy to visually see & manage the databases.
+2. Clone web-animations-test-infrastructure into /var/www
+3. Create a database called results and add the tables in the .sql files in directory sql
+   in the order queuedRuns, runs, results, asserts.
+4. Go to the github repository that you want to test with each push request. On the top
+   menu bar click "settings", on the side bar click "Service Hooks", then select WebHook URLs
+   under the available service hooks. Paste "http://YOUR_IP_ADDESS/web-animations-test-infrastructure/queueRuns.php"
+   into the url box and click update settings.
+5. Click "Test Hook" on the same page then go to "http://YOUR_IP_ADDESS/web-animations-test-infrastructure" and 
+   if its all working you should see some results in grey boxes.   
+
 <h3>Notes:</h3>
+- There a few hard coded links & ip addresses in some of the files that will need to be changed for it to work.
+- Apache2 has to own the git repo that it is reading the tests & web-animations-js from otherwise it wont have the
+  permissions to update it.
 - Results of all the tests are displayed using index.php.
 - All the tables for the database are created using the .sql files in the
   sql directory.
 - Everything in the classes directory controlls how to access a database
   table of the same name.
 
-<h3>Todos:</h3>
-- Fix how times for commits are added to database
-- Visually display the results in index.php
-- Get git to update to the right commit
+<h3>Terms:</h3>
+- Run: Collection of all the individual test file results for a certain commit.
+- Result: Collection of all the indivdual asserts results inside a test file.
+- Assert: Result of a single check inside a test file.
+- QueuedRun: A run that is scheduled to be processed.
 
 
