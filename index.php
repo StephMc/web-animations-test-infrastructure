@@ -21,11 +21,6 @@ function listRuns(){ ?>
   <a href="http://14.200.8.150/phpmyadmin"> PhpMyAdmin </a> <br>
   <a href="http://14.200.8.150/web-animations-test-framework/tests/testRunner.html"> Graphic view of tests </a> <br>
   <a href="http://14.200.8.150/web-animations-test-framework/tests/testGenerator.html"> Test Generator </a> <br>
-  <script>
-    setTimeout(function(){
-	window.location.href = window.location.href;
-      }, 1000);
-  </script>
   <?php
   $query = Run::getList();
   $runs = $query["results"];
