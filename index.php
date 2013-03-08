@@ -21,17 +21,27 @@ function listRuns(){ ?>
   <a href="http://14.200.8.150/phpmyadmin"> PhpMyAdmin </a> <br>
   <a href="http://14.200.8.150/web-animations-test-framework/tests/testRunner.html"> Graphic view of tests </a> <br>
   <a href="http://14.200.8.150/web-animations-test-framework/tests/testGenerator.html"> Test Generator </a> <br>
+  <script>
+    setTimeout(function(){
+	window.location.href = window.location.href;
+      }, 1000);
+  </script>
   <?php
   $query = Run::getList();
   $runs = $query["results"];
   $i = 0;
   foreach ( $runs as $run) {
-    list($passed, $total) = explode(" out of ",$run->testsPassed);
+    if($run->testsPassed != "Running...")
+      list($passed, $total) = explode(" out of ",$run->testsPassed);
     if($i == 0){
       ?> <h2> Latest Commit </h2>
       <div class=<?php
-        if($passed == $total) echo "pass";
-        else echo "fail";
+	if($run->testsPassed != "Running..."){
+          if($passed == $total) echo "pass";
+          else echo "fail";
+        } else {
+          echo "running";
+        }
         ?>><p>
         <h2>
           <a href="?action=result&amp;runId=<?php echo $run->id; ?>"><?php echo $run -> commitMessage?></a>
@@ -45,8 +55,12 @@ function listRuns(){ ?>
       <h2> History </h2> <?php
     } else {?>
        <div class=<?php
-         if($passed == $total) echo "pass";
-         else echo "fail";
+	 if($run->testsPassed != "Running..."){
+           if($passed == $total) echo "pass";
+           else echo "fail";
+	 } else {
+	   echo "running";
+	 }
          ?>><p>
           <h2>
             <a href="?action=result&amp;runId=<?php echo $run->id; ?>"><?php echo $run -> commitMessage?></a>

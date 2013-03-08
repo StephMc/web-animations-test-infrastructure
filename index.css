@@ -16,6 +16,16 @@
   width: 70%;
   margin: 0 auto; 
 }
+.running{
+  border:4px dotted;
+  border-radius:25px;
+  background-color:C9C9C9;
+  border-color:yellow;
+  padding-left: 20px;
+  width: 70%;
+  margin: 0 auto;
+}
+
 
 body{
   font-family: Comic Sans MS, Monospace;
